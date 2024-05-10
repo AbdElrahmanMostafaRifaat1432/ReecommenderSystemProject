@@ -18,3 +18,22 @@ def get_closest_matches(title: str, df: pd.DataFrame, column: str, num_matches: 
         title, df[column].tolist(), num_matches)
     closest_matches = df[df[column].isin(closest_titles)]
     return closest_matches
+
+
+def get_unique_raw(df: pd.DataFrame, column: str = 'year') -> list:
+    """
+    Get the unique of a column that has raw python type from the given column of the dataframe.
+    """
+    unique_years = df[column].unique()
+    unique_years = [year for year in unique_years if pd.notnull(year)]
+    return unique_years
+
+
+def get_unique_genres(df: pd.DataFrame, column: str) -> list:
+    """
+    Get the unique genres from the given column of the dataframe.
+    """
+    unique_genres = df[column].str.split('|').explode().str.strip().unique()
+    unique_genres = [
+        genre for genre in unique_genres if genre != '(no genres listed)']
+    return unique_genres
