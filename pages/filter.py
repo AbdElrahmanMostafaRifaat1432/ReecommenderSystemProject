@@ -17,49 +17,7 @@ dash.register_page(
 )
 
 
-def create_movie_card(movie):
-    return dbc.Card([
-        dbc.CardImg(src=movie['image'],
-                    top=True,  # make height 50% of the card
-                    style={"height": "50%",
-                           "width": "100%",
-                           "objectFit": "cover",
-                           "padding": "10",
-                           "marginTop": "10px",
-                           }),
-        dbc.CardBody([
-            html.H4(movie['title'], className="card-title"),
-            # use get genres to get the genres of the movie, and make each a deactive badge
-            html.P(
-                ([dbc.Badge(genre, color="primary", className="mr-1", style={"margin": "2px",  # make it bigger
-                                                                             "fontSize": "1.2em"})
-                  for genre in get_genres(movie)]),
-                className="card-text"
-            ),
-            html.P(f"Year: {movie['year']}", className="card-text"),
-            html.P(
-                f"Description: {movie['description']}", className="card-text"),
-        ],
-            # color the card body with a dark color
-            style={
-            "backgroundColor": "black",
-            "color": "white",
-            "marginTop": "10px",
-            "marginBottom": "10px",
-            "borderRadius": "10px",
-        }
-        ),
-    ],
-        style={
-        "width": "20rem",
-        "margin": "6px",
-
-    }
-    )
-
-
 layout = html.Div(
-    # create a search bar
     dbc.Row([
         dbc.Col([
             html.Div([
@@ -174,33 +132,56 @@ layout = html.Div(
         ),
 
         dbc.Col([
-            # row, then two column, search bar and a button
             dbc.Row([
+                dbc.Col([
+                    html.H4("Explore",
+                            style={"backgroundColor": "#212121",
+                                   "padding": "10px",
+                                   "borderRadius": "10px",
+                                   "color": "white",
+                                   "textAlign": "center",
+                                   "marginBottom": "10px",
+                                   "marginTop": "10px"}
+                            ),
+                ],
+                    width=2,
+                ),
                 dbc.Col([
                     dbc.Input(
                         id="search",
                         type="text",
                         placeholder="Search for a movie",
-                        style={"width": "100%"}
+                        style={"width": "100%",
+                               "height": "100%"},
                     ),
                 ],
-                    width=10
+                    width=8,
+
                 ),
                 dbc.Col([
                     dbc.Button(
                         "Search",
                         id="search-button",
                         className="coins-navbar-expand",
-                        style={"width": "100%"}
+                        style={"width": "100%",
+                               "height": "80%"},
                     ),
                 ],
-                    width=2
+                    width=2,
+                    style={"display": "flex",
+                           "alignItems": "center",
+                           "justifyContent": "center"}
                 ),
             ],
+                style={"marginBottom": "10px",
+                       "marginTop": "10px"},
             ),
 
-            # create hidden cards to show the movies details based on the search, filters
-            html.Div(id="movie-cards"),
+            html.Div(id="movie-cards",
+                        style={"display": "flex",
+                               "flexWrap": "wrap",
+                               "justifyContent": "center"}
+                     ),
         ],
             width=10,
             style={"marginTop": "10px",
@@ -267,7 +248,7 @@ def add_movie_cards(n, n_submit, genres, years, search_value):
     search_value = dash.callback_context.states['search.value']
 
     # get the movies that match the search value
-    closest_movies = get_closest_matches(search_value, movies_df, 'title')
+    closest_movies = get_closest_matches(search_value, movies_df, 'title', 20)
 
     # filter the movies based on the genres
     if genres:
@@ -286,5 +267,9 @@ def add_movie_cards(n, n_submit, genres, years, search_value):
     rows = []
     for i in range(0, len(movie_cards), 5):
         rows.append(dbc.Row(movie_cards[i:i + 5]))
+
+    if not rows:
+        return html.Div([html.H1("No Movies Found", style={"textAlign": "center", "marginTop": "30px"}),
+                         html.H4("Try a different search term or filter", style={"textAlign": "center"})])
 
     return rows
