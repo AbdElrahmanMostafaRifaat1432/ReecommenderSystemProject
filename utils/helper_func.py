@@ -37,3 +37,12 @@ def get_unique_genres(df: pd.DataFrame, column: str) -> list:
     unique_genres = [
         genre for genre in unique_genres if genre != '(no genres listed)']
     return unique_genres
+
+
+def get_genres(row: pd.Series) -> list:
+    """
+    Get the genres from the given row.
+    """
+    genres = row['genres'].split('|')
+    genres = [genre.strip() for genre in genres]
+    return genres
