@@ -71,6 +71,8 @@ def create_movie_card(movie):
             html.P(f"Year: {movie['year']}", className="card-text"),
             html.P(
                 f"Description: {movie['description']}", className="card-text"),
+            # dbc.Button("See more", id=str(movie['movieId']),
+            #            className="see-more-button", n_clicks=0),
         ],
             style={
             "backgroundColor": "black",
@@ -81,8 +83,44 @@ def create_movie_card(movie):
         }
         ),
     ],
+        className="movie-card-main",
         style={
         "width": "20rem",
         "margin": "6px",
     }
     )
+
+
+# # create a modal based on the movie clicked
+# def create_movie_modal(movie):
+#     return dbc.Modal([
+#         dbc.ModalHeader(movie['title']),
+#         dbc.ModalBody([
+#             html.Img(src=movie['image'],
+#                      style={"height": "50%",
+#                             "width": "100%",
+#                             "objectFit": "cover",
+#                             "padding": "10",
+#                             "marginTop": "10px",
+#                             }),
+#             html.H4("Description", className="modal-title"),
+#             html.P(movie['description'], className="modal-text"),
+#             html.H4("Genres", className="modal-title"),
+#             html.P(
+#                 ([dbc.Badge(genre, color="primary", className="mr-1", style={"margin": "2px",  # make it bigger
+#                                                                              "fontSize": "1.2em"})
+#                   for genre in get_genres(movie)]),
+#                 className="modal-text"
+#             ),
+#             html.H4("Year", className="modal-title"),
+#             html.P(movie['year'], className="modal-text"),
+#         ]
+#         ),
+#         dbc.ModalFooter(
+#             dbc.Button("Close", id="close", className="ml-auto")
+#         )
+#     ],
+#         id="modal",
+#         size="lg",
+#         is_open=False
+#     )

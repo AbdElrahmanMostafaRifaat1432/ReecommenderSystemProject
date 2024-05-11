@@ -30,7 +30,7 @@ sidebar = dbc.Nav([
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H1("MoveDB", className="main-title")
+            html.H1("CineScribe", className="main-title")
         ],
         )
     ],

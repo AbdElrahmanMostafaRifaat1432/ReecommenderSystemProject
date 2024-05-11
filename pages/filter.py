@@ -1,9 +1,10 @@
 import dash
-from dash import html, dcc, callback, Input, Output, State
+from dash import html, dcc, callback, Input, Output, State, ALL
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import os
 from utils.helper_func import *
+import numpy as np
 
 movies_df = pd.read_csv('data/movies_links.csv')
 unique_genres = get_unique_genres(movies_df, 'genres')
@@ -12,13 +13,13 @@ unique_years = get_unique_raw(movies_df, 'year')
 
 dash.register_page(
     __name__,
-    path="/",
+    # path="/",
     name="Filter",
 )
 
 
 layout = html.Div(
-    dbc.Row([
+    [dbc.Row([
         dbc.Col([
             html.Div([
                 dbc.Button(
@@ -193,7 +194,9 @@ layout = html.Div(
                    "marginBottom": "10px"},
         ),
     ],
-    )
+    ),
+
+    ],
 )
 
 
@@ -227,6 +230,10 @@ def toggle_navbar_collapse(n, is_open):
 )
 def apply_year_filter(n, min_year, max_year):
     # make sure the min year is less than the max year, if it is not, don't change the slider
+    # min to infinity, and max to -infinity
+    min_year = -np.inf if not min_year else min_year
+    max_year = np.inf if not max_year else max_year
+
     if min_year > max_year:
         return dash.no_update
     if n:
