@@ -28,18 +28,32 @@ def create_movie_card(movie):
                            "marginTop": "10px",
                            }),
         dbc.CardBody([
-            html.H5(movie['title'], className="card-title"),
-            # use get genres to get the genres of the movie
-            html.P(f"Genres: {', '.join(get_genres(movie))}",
-                   className="card-text"),
+            html.H4(movie['title'], className="card-title"),
+            # use get genres to get the genres of the movie, and make each a deactive badge
+            html.P(
+                ([dbc.Badge(genre, color="primary", className="mr-1", style={"margin": "2px",  # make it bigger
+                                                                             "fontSize": "1.2em"})
+                  for genre in get_genres(movie)]),
+                className="card-text"
+            ),
             html.P(f"Year: {movie['year']}", className="card-text"),
             html.P(
                 f"Description: {movie['description']}", className="card-text"),
-        ]),
+        ],
+            # color the card body with a dark color
+            style={
+            "backgroundColor": "black",
+            "color": "white",
+            "marginTop": "10px",
+            "marginBottom": "10px",
+            "borderRadius": "10px",
+        }
+        ),
     ],
         style={
         "width": "20rem",
         "margin": "6px",
+
     }
     )
 
@@ -269,7 +283,6 @@ def add_movie_cards(n, n_submit, genres, years, search_value):
     movie_cards = [create_movie_card(movie)
                    for _, movie in closest_movies.iterrows()]
 
-    # create a row of cards, make a row, and for every row, make a column for each card
     rows = []
     for i in range(0, len(movie_cards), 5):
         rows.append(dbc.Row(movie_cards[i:i + 5]))
