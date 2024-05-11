@@ -135,13 +135,13 @@ layout = html.Div(
             dbc.Row([
                 dbc.Col([
                     html.H4("Explore",
-                            style={"backgroundColor": "#212121",
-                                   "padding": "10px",
-                                   "borderRadius": "10px",
-                                   "color": "white",
-                                   "textAlign": "center",
-                                   "marginBottom": "10px",
-                                   "marginTop": "10px"}
+                            style={
+                                "padding": "10px",
+                                "borderRadius": "10px",
+                                "color": "white",
+                                "textAlign": "center",
+                                "marginBottom": "10px",
+                                "marginTop": "10px"}
                             ),
                 ],
                     width=2,
@@ -152,7 +152,8 @@ layout = html.Div(
                         type="text",
                         placeholder="Search for a movie",
                         style={"width": "100%",
-                               "height": "100%"},
+                               "height": "100%",
+                               "borderRadius": "40px", }
                     ),
                 ],
                     width=8,
@@ -160,11 +161,15 @@ layout = html.Div(
                 ),
                 dbc.Col([
                     dbc.Button(
-                        "Search",
+                        "Film it!",
                         id="search-button",
                         className="coins-navbar-expand",
                         style={"width": "100%",
-                               "height": "80%"},
+                               "height": "80%",
+                               "textAlign": "center",
+                               "fontSize": "1.5em",
+                               "borderRadius": "10px",
+                               }
                     ),
                 ],
                     width=2,
@@ -177,10 +182,10 @@ layout = html.Div(
                        "marginTop": "10px"},
             ),
 
-            html.Div(id="movie-cards",
-                        style={"display": "flex",
-                               "flexWrap": "wrap",
-                               "justifyContent": "center"}
+            html.Div(html.H1("Your search bar is feeling cinematic! Type in a movie!", style={"textAlign": "center", "marginTop": "150px"}), id="movie-cards",
+                     style={"display": "flex",
+                            "flexWrap": "wrap",
+                            "justifyContent": "center"}
                      ),
         ],
             width=10,
