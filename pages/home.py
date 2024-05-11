@@ -17,5 +17,32 @@ dash.register_page(
 )
 
 layout = html.Div(
+    [
+        html.Div(id='movie-carousel'),
+
+        dcc.Interval(
+            id='interval-component',
+            interval=3000,  # in milliseconds
+            n_intervals=0
+        ),
+    ],
+
 )
-# home
+
+
+@callback(
+    Output("movie-carousel", "children"),
+    Input("interval-component", "n_intervals")
+)
+def update_cards(n):
+    # based on n, get the next 3 movies, and create the cards and put them in a single row
+    # return the row
+    return dbc.Row([
+        create_movie_card(movie, with_description=False)
+        for movie in movies_df.iloc[n:n+3].to_dict(orient='records')
+    ],
+        style={"margin": "10px",
+               "justify-content": "center",
+               "height": "300px"
+               }
+    )

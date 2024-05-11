@@ -50,7 +50,11 @@ def get_genres(row: pd.Series) -> list:
     return genres
 
 
-def create_movie_card(movie):
+def create_movie_card(movie, with_description: bool = True):
+    if with_description:
+        desc = f"Description: {movie['description']}"
+    else:
+        desc = ""
     return dbc.Card([
         dbc.CardImg(src=movie['image'],
                     top=True,
@@ -70,7 +74,7 @@ def create_movie_card(movie):
             ),
             html.P(f"Year: {movie['year']}", className="card-text"),
             html.P(
-                f"Description: {movie['description']}", className="card-text"),
+                desc, className="card-text"),
             # dbc.Button("See more", id=str(movie['movieId']),
             #            className="see-more-button", n_clicks=0),
         ],
