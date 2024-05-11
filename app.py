@@ -11,11 +11,11 @@ app = dash.Dash(__name__, external_stylesheets=[
 
 sidebar = dbc.Nav([
     dbc.NavLink("Home", href="/", active="exact", className="home-link"),
-    dbc.NavLink("Recommend", href="/exchanges",
+    dbc.NavLink("Recommend", href="/Recommend",
                 active="exact", className="home-link"),
     dbc.NavbarToggler(id="filter-toggler", className="home-link", n_clicks=0, children=[
-        dbc.NavLink("Filter",  href="/filter", active="exact",
-                    className="coins-navbar-expand", id="home-link"),
+        dbc.NavLink("Filter",  href="/Filter",
+                    active="exact", id="home-link"),
     ]),
 ],
     horizontal=True,

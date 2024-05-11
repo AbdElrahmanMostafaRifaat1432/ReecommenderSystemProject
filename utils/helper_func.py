@@ -58,6 +58,22 @@ def get_n_top_movies(df: pd.DataFrame, column: str, n: int = 10) -> pd.DataFrame
     return top_movies
 
 
+def get_random_userid(df: pd.DataFrame) -> int:
+    """
+    Get a random userId from the unique userIds in the dataframe.
+    """
+    userId = df['userId'].sample().values[0]
+    return userId
+
+
+def get_user_ratings(df: pd.DataFrame, user_id: int, n: int = 10) -> pd.DataFrame:
+    """
+    Get the n ratings of the given user from the dataframe.
+    """
+    user_ratings = df[df['userId'] == user_id].head(n)
+    return user_ratings
+
+
 def create_smaller_movie_card(movie, with_description: bool = True):
     if with_description:
         desc = f"Description: {movie['description']}"
