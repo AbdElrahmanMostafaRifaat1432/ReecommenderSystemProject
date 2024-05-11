@@ -50,6 +50,59 @@ def get_genres(row: pd.Series) -> list:
     return genres
 
 
+def get_n_top_movies(df: pd.DataFrame, column: str, n: int = 10) -> pd.DataFrame:
+    """
+    Get the n top popular movies from the given dataframe.
+    """
+    top_movies = df.sort_values(by=column, ascending=False).head(n)
+    return top_movies
+
+
+def create_smaller_movie_card(movie, with_description: bool = True):
+    if with_description:
+        desc = f"Description: {movie['description']}"
+    else:
+        desc = ""
+    return dbc.Card([
+        dbc.CardImg(src=movie['image'],
+                    top=True,
+                    style={"height": "50%",
+                           "width": "100%",
+                           #    "objectFit": "cover",
+                           "padding": "10",
+                           "marginTop": "10px",
+                           }),
+        dbc.CardBody([
+            html.H5(movie['title'], className="card-title"),
+            html.P(
+                ([dbc.Badge(genre, color="primary", className="mr-1", style={"margin": "2px",
+                                                                             "fontSize": "0.8em"})
+                 for genre in get_genres(movie)]),
+                className="card-text"
+            ),
+            html.P(
+                desc, className="card-text"),
+            # dbc.Button("See more", id=str(movie['movieId']),
+            #            className="see-more-button", n_clicks=0),
+        ],
+            style={
+            "backgroundColor": "black",
+            "color": "white",
+            "marginTop": "10px",
+            "marginBottom": "10px",
+            "borderRadius": "10px",
+
+        }
+        ),
+    ],
+        className="movie-card-main",
+        style={
+        "width": "16rem",
+        "margin": "6px",
+    }
+    )
+
+
 def create_movie_card(movie, with_description: bool = True):
     if with_description:
         desc = f"Description: {movie['description']}"
@@ -84,6 +137,7 @@ def create_movie_card(movie, with_description: bool = True):
             "marginTop": "10px",
             "marginBottom": "10px",
             "borderRadius": "10px",
+
         }
         ),
     ],

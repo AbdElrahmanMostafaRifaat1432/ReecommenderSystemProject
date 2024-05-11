@@ -18,13 +18,74 @@ dash.register_page(
 
 layout = html.Div(
     [
-        html.Div(id='movie-carousel'),
+        html.Div([
+            dbc.Row([
+                html.H4("Find new movies!", className="main-sub-title"),
+            ],),
+            dbc.Row([
+
+                dbc.Col([
+                    html.Div(id='movie-carousel'),
+                ],
+                    width=12,
+                ),
+            ]),
+        ],
+            style={"height": "300px"}
+        ),
+        html.Div([
+            dbc.Row([
+                html.H4("Top popular movies!", className="sub-title"),
+            ],),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Row([
+                        create_smaller_movie_card(
+                            movie, with_description=False)
+                        for movie in get_n_top_movies(movies_df, 'ratings_count', 12).to_dict(orient='records')
+                    ],
+                        style={"margin": "10px",
+                               "justify-content": "center",
+                               "height": "100px"
+                               }
+                    ),
+                ],
+                    width=12,
+                ),
+            ]),
+        ],
+            style={"marginTop": "340px"}
+        ),
+        html.Div([
+            dbc.Row([
+                html.H4("Top rated movies!", className="sub-title"),
+            ],),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Row([
+                        create_smaller_movie_card(
+                            movie, with_description=False)
+                        for movie in get_n_top_movies(movies_df, 'average_rating', 12).to_dict(orient='records')
+                    ],
+                        style={"margin": "10px",
+                               "justify-content": "center",
+                               }
+                    ),
+                ],
+                    width=12,
+                ),
+            ],
+            ),
+        ],
+            style={"marginTop": "1000px"}
+        ),
 
         dcc.Interval(
             id='interval-component',
             interval=3000,  # in milliseconds
             n_intervals=0
         ),
+
     ],
 
 )
@@ -35,14 +96,16 @@ layout = html.Div(
     Input("interval-component", "n_intervals")
 )
 def update_cards(n):
-    # based on n, get the next 3 movies, and create the cards and put them in a single row
-    # return the row
+    # if n is more than the number of movies, reset n
+    if n+7 > len(movies_df):
+        n = 0
+
     return dbc.Row([
-        create_movie_card(movie, with_description=False)
-        for movie in movies_df.iloc[n:n+3].to_dict(orient='records')
+        create_smaller_movie_card(movie, with_description=False)
+        for movie in movies_df.iloc[n:n+7].to_dict(orient='records')
     ],
         style={"margin": "10px",
                "justify-content": "center",
-               "height": "300px"
+               "height": "100px"
                }
     )

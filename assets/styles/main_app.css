@@ -19,3 +19,23 @@
   text-shadow: 10px 10px 10px #000000;
   height: 10vh;
 }
+
+.sub-title {
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(255, 255, 255);
+  background: #2A9FD6;
+  text-shadow: 10px 10px 10px #000000;
+  margin-top: 30px;
+  border-radius: 30px;
+}
+
+.main-sub-title {
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(255, 255, 255);
+  background: #E2B616;
+  text-shadow: 10px 10px 10px #000000;
+  margin-top: 30px;
+  border-radius: 30px;
+}
