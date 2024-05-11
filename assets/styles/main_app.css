@@ -1,0 +1,41 @@
+
+/* Path: assets/styles/main_app.css */
+/* for className=home-link, make width 10% */
+.home-link {
+  width: 10%;
+  background-color: #3d5865;  
+  /*make it rounded*/
+  border-radius: 8px;
+  text-align: center;
+}
+
+
+/*do the above in css foramt*/
+.main-title {
+  text-align: center;
+  font-size: 4rem;
+  color: rgb(255, 255, 255);
+  background: linear-gradient(to right, rgb(66, 107, 138), rgba(0, 0, 0, 0));
+  text-shadow: 10px 10px 10px #000000;
+  height: 10vh;
+}
+
+.sub-title {
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(255, 255, 255);
+  background: #2A9FD6;
+  text-shadow: 10px 10px 10px #000000;
+  margin-top: 30px;
+  border-radius: 30px;
+}
+
+.main-sub-title {
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(255, 255, 255);
+  background: #E2B616;
+  text-shadow: 10px 10px 10px #000000;
+  margin-top: 30px;
+  border-radius: 30px;
+}
