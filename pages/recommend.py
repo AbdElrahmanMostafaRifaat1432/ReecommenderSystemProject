@@ -16,9 +16,8 @@ userid = get_random_userid(ratings_df)
 user_ratings = get_user_ratings(ratings_df, userid)
 user_ratings = user_ratings.merge(movies_df, on='movieId')
 user_ratings = user_ratings[['userId', 'title', 'rating']]
-dataLast, movie, data_pivot = data_prep()
-
-print("hi")
+final_dataset, sample, sparsity, movies = data_prep()
+csr_data, knn = create_model(sample, final_dataset)
 
 dash.register_page(
     __name__,

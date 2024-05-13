@@ -13,7 +13,7 @@ unique_years = get_unique_raw(movies_df, 'year')
 
 dash.register_page(
     __name__,
-    # path="/",
+    path="/Filter",
     name="Filter",
 )
 
