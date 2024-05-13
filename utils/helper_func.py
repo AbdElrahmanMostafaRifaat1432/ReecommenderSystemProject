@@ -8,7 +8,11 @@ def __get_closest_titles(title: str, titles: list, num_matches: int = 10) -> lis
     """
     Get the closest titles to the given title from the list of titles.
     """
-    closest_titles = difflib.get_close_matches(title, titles, num_matches)
+    titles = [t.lower() for t in titles]
+
+    closest_titles = difflib.get_close_matches(
+        title.lower(), titles, n=num_matches)
+    print(closest_titles)
     return closest_titles
 
 
@@ -18,7 +22,10 @@ def get_closest_matches(title: str, df: pd.DataFrame, column: str, num_matches: 
     """
     closest_titles = __get_closest_titles(
         title, df[column].tolist(), num_matches)
-    closest_matches = df[df[column].isin(closest_titles)]
+    closest_matches = pd.DataFrame()
+    for closest_title in closest_titles:
+        closest_matches = pd.concat(
+            [closest_matches, df[df[column].str.lower() == closest_title]])
     return closest_matches
 
 
@@ -72,6 +79,20 @@ def get_user_ratings(df: pd.DataFrame, user_id: int, n: int = 10) -> pd.DataFram
     """
     user_ratings = df[df['userId'] == user_id].head(n)
     return user_ratings
+
+# function to get movies from id list
+
+
+def get_movies_from_id_list(df: pd.DataFrame, id_list: list) -> pd.DataFrame:
+    """
+    Get the movies from the given list of ids from the dataframe.
+    """
+    # add each movie to a pandas dataframe, with the same sequence as the id_list
+    movies = pd.DataFrame()
+    for movie_id in id_list:
+        movie = df[df['movieId'] == movie_id]
+        movies = pd.concat([movies, movie])
+    return movies
 
 
 def create_smaller_movie_card(movie, with_description: bool = True):
@@ -141,7 +162,7 @@ def create_movie_card(movie, with_description: bool = True):
                   for genre in get_genres(movie)]),
                 className="card-text"
             ),
-            html.P(f"Year: {movie['year']}", className="card-text"),
+            html.P(f"Year: {int(movie['year'])}", className="card-text"),
             html.P(
                 desc, className="card-text"),
             # dbc.Button("See more", id=str(movie['movieId']),

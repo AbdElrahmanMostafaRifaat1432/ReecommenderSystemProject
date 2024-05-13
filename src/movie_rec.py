@@ -34,13 +34,23 @@ def create_model(sample: np.array, final_dataset: pd.DataFrame):
 
 
 def get_movie(movie_name, movies: pd.DataFrame):
+    # print(movie_name)
     movie = movies[movies['title'].str.lower() == movie_name.lower()]
     # print("he")
     if len(movie) == 0:
-        movie = movies[movies['title'].str.contains(movie_name)]
-        # print("ho")
-        if len(movie) == 0:
-            movie = difflib.get_close_matches(movie_name, movies['title'])
+        # check which titles contain the movie name (make them both lowercase), using contains
+        movie = movies[movies['title'].str.lower().str.contains(
+            movie_name.lower())]
+        if len(movie) != 0:
+            # make movie the least len(title) out of all movies
+            movie = movie[movie['title'].str.len(
+            ) == movie['title'].str.len().min()]
+            # print("hi")
+            # print(movie)
+
+        else:
+            movie = difflib.get_close_matches(
+                movie_name.lower(), movies['title'].str.lower(), n=10)
             # get the details of the movie list found from movies dataframe
             movie = movies[movies['title'].isin(movie)]
 
@@ -53,6 +63,8 @@ def get_movie_recommendation(movie_name, final_dataset: pd.DataFrame, movies: pd
     n_movies_to_reccomend = 10
 
     movie_list = get_movie(movie_name, movies)
+    # movie id list
+    movie_id_list = []
 
     for i in range(len(movie_list)):
         movie_idx = movie_list.iloc[i]['movieId']
@@ -68,12 +80,14 @@ def get_movie_recommendation(movie_name, final_dataset: pd.DataFrame, movies: pd
             recommend_frame = []
             for val in rec_movie_indices:
                 movie_idx = final_dataset.iloc[val[0]]['movieId']
+                movie_id_list.append(movie_idx)
                 idx = movies[movies['movieId'] == movie_idx].index
                 recommend_frame.append(
                     {'Title': movies.iloc[idx]['title'].values[0], 'Distance': val[1]})
             df = pd.DataFrame(recommend_frame, index=range(
                 1, n_movies_to_reccomend+1))
-            return df
+            # return a list of movie
+            return movie_id_list
 
     return "No movies found. Please check your input"
 
