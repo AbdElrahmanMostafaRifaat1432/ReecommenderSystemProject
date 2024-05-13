@@ -47,6 +47,7 @@ layout = html.Div(
             ],
                 style={
                 "marginLeft": "10px",
+                "marginBottom": "10px",
             }
             ),
             html.Div([
@@ -60,7 +61,6 @@ layout = html.Div(
                         "marginBottom": "10px",
                     }
                 ),
-                # collapse the filter, and add checkboxes for years
                 dbc.Collapse(
                     [
                         dcc.RangeSlider(
@@ -70,7 +70,6 @@ layout = html.Div(
                             step=1,
                             value=[min(unique_years), max(unique_years)],
                             pushable=1,
-                            # make marks color white
                             marks={
                                 year: {"label": str(year), "style": {
                                     "color": "white"}}
@@ -82,7 +81,6 @@ layout = html.Div(
                         ),
 
                         dbc.Row([
-                            # add two text boxes to select min and max years
                             dbc.Col([
                                 dbc.Input(
                                     id="min-year",
@@ -113,7 +111,6 @@ layout = html.Div(
                             style={
                                 "width": "50%",
                                 "marginTop": "10px",
-                                # move it to the center
                                 "marginLeft": "25%"
                             }
                         ),
@@ -229,8 +226,7 @@ def toggle_navbar_collapse(n, is_open):
      State("max-year", "value")]
 )
 def apply_year_filter(n, min_year, max_year):
-    # make sure the min year is less than the max year, if it is not, don't change the slider
-    # min to infinity, and max to -infinity
+
     min_year = -np.inf if not min_year else min_year
     max_year = np.inf if not max_year else max_year
 
@@ -241,8 +237,6 @@ def apply_year_filter(n, min_year, max_year):
     return [min(unique_years), max(unique_years)]
 
 
-# call back to add the movie cards based on the search, filters, make it 4 cards per row
-# apply only when the search button is clicked, or when enter is pressed on the search bar
 @ callback(
     Output("movie-cards", "children"),
     [Input("search-button", "n_clicks"),
@@ -252,27 +246,21 @@ def apply_year_filter(n, min_year, max_year):
      State("search", "value")]
 )
 def add_movie_cards(n, n_submit, genres, years, search_value):
-    # if the search button is not clicked, and enter is not pressed, return no update
     if not n and not n_submit:
         return dash.no_update
 
-    # get the search value
     search_value = dash.callback_context.states['search.value']
 
-    # get the movies that match the search value
-    closest_movies = get_closest_matches(search_value, movies_df, 'title', 20)
+    closest_movies = get_closest_matches(search_value, movies_df, 'title', 30)
 
-    # filter the movies based on the genres
     if genres:
         closest_movies = closest_movies[closest_movies['genres'].str.contains(
             '|'.join(genres))]
 
-    # filter the movies based on the years
     if years:
         closest_movies = closest_movies[(closest_movies['year'] >= years[0]) & (
             closest_movies['year'] <= years[1])]
 
-    # create the movie cards
     movie_cards = [create_movie_card(movie)
                    for _, movie in closest_movies.iterrows()]
 

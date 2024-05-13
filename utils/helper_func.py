@@ -12,7 +12,7 @@ def __get_closest_titles(title: str, titles: list, num_matches: int = 10) -> lis
 
     closest_titles = difflib.get_close_matches(
         title.lower(), titles, n=num_matches)
-    print(closest_titles)
+    # print(closest_titles)
     return closest_titles
 
 
@@ -80,14 +80,11 @@ def get_user_ratings(df: pd.DataFrame, user_id: int, n: int = 10) -> pd.DataFram
     user_ratings = df[df['userId'] == user_id].head(n)
     return user_ratings
 
-# function to get movies from id list
-
 
 def get_movies_from_id_list(df: pd.DataFrame, id_list: list) -> pd.DataFrame:
     """
     Get the movies from the given list of ids from the dataframe.
     """
-    # add each movie to a pandas dataframe, with the same sequence as the id_list
     movies = pd.DataFrame()
     for movie_id in id_list:
         movie = df[df['movieId'] == movie_id]
@@ -105,7 +102,6 @@ def create_smaller_movie_card(movie, with_description: bool = True):
                     top=True,
                     style={"height": "50%",
                            "width": "100%",
-                           #    "objectFit": "cover",
                            "padding": "10",
                            "marginTop": "10px",
                            }),
@@ -119,8 +115,7 @@ def create_smaller_movie_card(movie, with_description: bool = True):
             ),
             html.P(
                 desc, className="card-text"),
-            # dbc.Button("See more", id=str(movie['movieId']),
-            #            className="see-more-button", n_clicks=0),
+
         ],
             style={
             "backgroundColor": "black",
@@ -165,8 +160,7 @@ def create_movie_card(movie, with_description: bool = True):
             html.P(f"Year: {int(movie['year'])}", className="card-text"),
             html.P(
                 desc, className="card-text"),
-            # dbc.Button("See more", id=str(movie['movieId']),
-            #            className="see-more-button", n_clicks=0),
+
         ],
             style={
             "backgroundColor": "black",
@@ -186,7 +180,6 @@ def create_movie_card(movie, with_description: bool = True):
     )
 
 
-# # create a modal based on the movie clicked
 # def create_movie_modal(movie):
 #     return dbc.Modal([
 #         dbc.ModalHeader(movie['title']),

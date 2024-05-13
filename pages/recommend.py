@@ -22,11 +22,11 @@ user_ratings = user_ratings[['userId', 'title', 'rating']]
 movie_final_dataset, movie_sample, movie_sparsity, movie_movies = data_prep()
 movie_csr_data, movie_knn = create_model(movie_sample, movie_final_dataset)
 
-# user_genres_list, user_concatenated_tags_list, user_data, model = init()
-# user_reccomendations = user_recomm(user_id, user_genres_list,
-#                                    user_concatenated_tags_list, user_data, model, k)
+user_genres_list, user_concatenated_tags_list, user_data, model = init()
+user_reccomendations = user_recomm(user_id, user_genres_list,
+                                   user_concatenated_tags_list, user_data, model, k)
 
-user_reccomendations = [461, 659, 895, 314, 46, 913, 921, 1733, 2224, 6693]
+# user_reccomendations = [461, 659, 895, 314, 46, 913, 921, 1733, 2224, 6693]
 user_reccomendations = get_movies_from_id_list(movies_df, user_reccomendations)
 
 user_movie_cards = [create_movie_card(movie)
@@ -44,8 +44,7 @@ layout = html.Div([
                 html.H2("Hello User " + str(user_id)),
                 html.Div([
                     html.H5("User Ratings"),
-                    # in a card, add the user ratings, with the title: rating format
-                    # where rating is in a blue badge
+
                     dbc.Card([
                         dbc.CardBody([
                             dbc.Row([
@@ -141,8 +140,7 @@ layout = html.Div([
                                             "justifyContent": "center"}
                          ),
 
-                # div the consists of rows just like filter add_movie_cards callback function
-                # it will display the user_reccomendations where each row has 5 cards
+
                 dbc.Row([
                         html.H3("Based on the movies you have watched!",
                                 className="sub-title"),
@@ -176,20 +174,21 @@ layout = html.Div([
     Output("movie-recommend-cards", "children"),
     Output("searched-movie-title", "children"),
     Input("search-button", "n_clicks"),
+    Input("search", "n_submit"),
+
     State("search", "value")
+
 )
-def add_movie_cards(n, search):
+def add_movie_cards(n_clicks, n_submit, search):
     if search is None:
         return [html.H1("Your search bar is feeling cinematic! Type in a movie!", style={"textAlign": "center", "marginTop": "150px"})], ""
     else:
-        # using get_movie from movie_rec.py
         movie = get_movie_recommendation(search, movie_final_dataset,
                                          movie_movies, movie_csr_data, movie_knn)
         if movie is None:
             return [html.H1("Movie not found! Try again!", style={"textAlign": "center", "marginTop": "150px"})], ""
         else:
-            print(movie)
-            movie = list(map(int, movie))
+            movie = [int(float(i)) for i in movie]
             movie = get_movies_from_id_list(movies_df, movie)
             rows = []
             movie_movie_cards = [create_movie_card(movie)

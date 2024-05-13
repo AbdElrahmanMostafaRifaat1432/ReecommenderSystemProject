@@ -5,10 +5,14 @@ from sklearn.neighbors import NearestNeighbors
 import matplotlib.pyplot as plt
 import seaborn as sns
 import difflib
+from utils.helper_func import get_closest_matches
 
 
 def data_prep():
     movies = pd.read_csv("./data/movies.csv")
+    movies['title'] = movies['title'].str.replace(
+        r"\s\(\d{4}\)", "", regex=True)
+
     ratings = pd.read_csv("./data/ratings.csv")
     final_dataset = ratings.pivot(
         index='movieId', columns='userId', values='rating')
@@ -36,25 +40,22 @@ def create_model(sample: np.array, final_dataset: pd.DataFrame):
 def get_movie(movie_name, movies: pd.DataFrame):
     # print(movie_name)
     movie = movies[movies['title'].str.lower() == movie_name.lower()]
-    # print("he")
+    print("he")
     if len(movie) == 0:
-        # check which titles contain the movie name (make them both lowercase), using contains
-        movie = movies[movies['title'].str.lower().str.contains(
-            movie_name.lower())]
-        if len(movie) != 0:
-            # make movie the least len(title) out of all movies
-            movie = movie[movie['title'].str.len(
-            ) == movie['title'].str.len().min()]
-            # print("hi")
-            # print(movie)
+        # movie = movies[movies['title'].str.lower().str.contains(
+        #     movie_name.lower())]
+        # if len(movie) != 0:
+        #     # make movie the least len(title) out of all movies
+        #     movie = movie[movie['title'].str.len(
+        #     ) == movie['title'].str.len().min()]
+        #     print("hi")
+        #     print(movie)
 
-        else:
-            movie = difflib.get_close_matches(
-                movie_name.lower(), movies['title'].str.lower(), n=10)
-            # get the details of the movie list found from movies dataframe
-            movie = movies[movies['title'].isin(movie)]
+        # else:
+        movie = get_closest_matches(movie_name, movies, 'title')
+        print(movie)
+        print("ho")
 
-            # print("ha")
     # print(movie)
     return movie
 
@@ -86,10 +87,9 @@ def get_movie_recommendation(movie_name, final_dataset: pd.DataFrame, movies: pd
                     {'Title': movies.iloc[idx]['title'].values[0], 'Distance': val[1]})
             df = pd.DataFrame(recommend_frame, index=range(
                 1, n_movies_to_reccomend+1))
-            # return a list of movie
             return movie_id_list
 
-    return "No movies found. Please check your input"
+    return None
 
 
 # use case

@@ -3,8 +3,6 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc, callback, Input, Output, State
 
 
-# create the app with the slate theme
-
 app = dash.Dash(__name__, external_stylesheets=[
                 dbc.themes.CYBORG, 'assets/styles/main_app.css'], use_pages=True)
 
@@ -53,7 +51,8 @@ app.layout = dbc.Container([
         )
     ])
 ],
-    fluid=True
+    fluid=True,
+    id="main-container",
 )
 
 

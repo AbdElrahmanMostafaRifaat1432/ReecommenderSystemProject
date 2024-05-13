@@ -82,7 +82,7 @@ layout = html.Div(
 
         dcc.Interval(
             id='interval-component',
-            interval=3000,  # in milliseconds
+            interval=3000,
             n_intervals=0
         ),
 
@@ -96,7 +96,6 @@ layout = html.Div(
     Input("interval-component", "n_intervals")
 )
 def update_cards(n):
-    # if n is more than the number of movies, reset n
     if n+7 > len(movies_df):
         n = 0
 
